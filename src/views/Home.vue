@@ -1,6 +1,7 @@
 <template>
   <div class="main">
-    <Register msg="Welcome to Your Vue.js + TypeScript App" />
+    <b-spinner v-if="loading" />
+    <Register v-else msg="Welcome to Your Vue.js + TypeScript App" />
   </div>
 </template>
 
@@ -13,7 +14,11 @@ import Register from "@/components/Register.vue"; // @ is an alias to /src
     Register
   }
 })
-export default class Home extends Vue {}
+export default class Home extends Vue {
+  get loading() {
+    return this.$store.state.loading
+  }
+}
 </script>
 
 <style lang="scss" scoped>

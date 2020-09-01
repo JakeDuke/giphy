@@ -4,7 +4,7 @@
       <b-form-input v-model="email" placeholder="Enter your email"></b-form-input>
       <b-form-input v-model="password" placeholder="Enter your password"></b-form-input>
     </div>
-    <b-button pill variant="success">Register</b-button>
+    <b-button pill variant="success" @click="loadddd">Register</b-button>
   </div>
 </template>
 
@@ -17,6 +17,10 @@ export default class HelloWorld extends Vue {
 
   email = ''
   password = ''
+
+  loadddd () {
+    this.$store.commit('load')
+  }
 }
 </script>
 

@@ -1,8 +1,9 @@
 <template>
   <div class="wrap">
     <div class="register">
-      <b-form-input v-model="email" placeholder="Введите Ваш email"></b-form-input>
-      <b-form-input v-model="password" placeholder="Введите Ваш пароль"></b-form-input>
+      <b-form-input v-model="email" placeholder="Имя"></b-form-input>
+      <b-form-input v-model="password" placeholder="Фамилия"></b-form-input>
+      <b-form-input v-model="age" placeholder="Возраст"></b-form-input>
     </div>
   </div>
 </template>
@@ -12,12 +13,12 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 
 @Component
 export default class HelloWorld extends Vue {
-  email = ''
-  password = ''
+  name = ''
+  lastname = ''
+  age = ''
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .wrap {
   width: 100%;

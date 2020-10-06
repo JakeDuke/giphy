@@ -50,9 +50,9 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 @Component
 export default class HelloWorld extends Vue {
   
-  сhronicDiseases = null
-  currentDiseases = null
-  allergy = null
+  сhronicDiseases = false
+  currentDiseases = false
+  allergy = false
 
   сhronicDiseasesText = ''
   currentDiseasesText = ''

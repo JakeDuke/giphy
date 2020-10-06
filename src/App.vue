@@ -9,20 +9,21 @@ html, body {
   height: 100%;
 }
 
+$colour:rgb(10, 1, 2);
+$grey:desaturate($colour,80%);
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: whitesmoke;
   padding: 8px 12px;
   height: 100%;
-  background-image: linear-gradient(-120deg, rgb(194, 3, 194), rgb(51, 1, 51));
+  background-image: linear-gradient(-120deg, rgb(47, 9, 47), rgb(31, 1, 31));
 }
 
 #nav {
-  // padding: 30px;
-  // position: absolute;
   top: 0;
   width: 100%;
 

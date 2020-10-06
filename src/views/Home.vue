@@ -4,8 +4,9 @@
     <div v-else class="w-100">
       <!-- <Register /> -->
       <!-- <Credentials /> -->
-      <BasicInfo />
-      <b-button pill variant="success" @click="load">Далее</b-button>
+      <!-- <BasicInfo /> -->
+      <SosButton />
+      <!-- <b-button pill variant="success" @click="load">Далее</b-button> -->
     </div>
   </div>
 </template>
@@ -15,12 +16,14 @@ import { Component, Vue } from "vue-property-decorator";
 import Register from "@/components/Register.vue";
 import Credentials from "@/components/Credentials.vue";
 import BasicInfo from "@/components/BasicInfo.vue";
+import SosButton from "@/components/SosButton.vue";
 
 @Component({
   components: {
     Register,
     Credentials,
-    BasicInfo
+    BasicInfo,
+    SosButton
   }
 })
 export default class Home extends Vue {

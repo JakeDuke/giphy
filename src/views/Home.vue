@@ -2,11 +2,11 @@
   <div class="main">
     <b-spinner v-if="loading" />
     <div v-else class="w-100">
-      <!-- <Register /> -->
-      <!-- <Credentials /> -->
-      <!-- <BasicInfo /> -->
-      <SosButton />
-      <!-- <b-button pill variant="success" @click="load">Далее</b-button> -->
+      <Register v-if="visibleComponent === 1" />
+      <Credentials v-if="visibleComponent === 2" />
+      <BasicInfo v-if="visibleComponent === 3" />
+      <SosButton v-if="visibleComponent === 4" />
+      <b-button v-if="visibleComponent !== 4" pill variant="primary" @click="setVisible">Далее</b-button>
     </div>
   </div>
 </template>
@@ -34,6 +34,13 @@ export default class Home extends Vue {
   load () {
     this.$store.commit('load')
   }
+
+  visibleComponent = 1
+
+  setVisible () {
+    this.visibleComponent++
+    this.load()
+  }
 }
 </script>
 
@@ -52,8 +59,9 @@ export default class Home extends Vue {
 }
 
 .btn {
-  margin-top: 30px;
-  padding: 10px 20px;
-  min-width: 120px;
+  margin-top: 60px;
+  padding: 12px 30px;
+  min-width: 160px;
+  font-size: 18px;
 } 
 </style>

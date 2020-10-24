@@ -1,6 +1,9 @@
 <template>
   <div class="wrap">
-    <button>Panic button</button>
+    <button v-if="!clicked" @click="click">Panic button</button>
+    <div v-else class="qr-wrap">
+      <img src="../assets/qr-code.png" alt="">
+    </div>
   </div>
 </template>
 
@@ -10,10 +13,24 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 @Component
 export default class Sos extends Vue {
 
+  clicked = false
+
+  click () {
+    this.clicked = true
+  }
+
 }
 </script>
 
 <style lang="scss" scoped>
+.qr-wrap {
+  max-width: 100%;
+  background: white;
+
+  img {
+    width: 100%;
+  }
+}
 /*I just made this background and wanted to save it here*/
 $colour:hsla(350,100%,25%,1);
 $grey:desaturate($colour,90%);

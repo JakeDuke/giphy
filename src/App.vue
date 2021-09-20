@@ -5,12 +5,13 @@
 </template>
 
 <style lang="scss">
-html, body {
+html,
+body {
   height: 100%;
 }
 
-$colour:rgb(10, 1, 2);
-$grey:desaturate($colour,80%);
+$colour: rgb(10, 1, 2);
+$grey: desaturate($colour, 80%);
 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -20,8 +21,6 @@ $grey:desaturate($colour,80%);
   color: whitesmoke;
   padding: 8px 12px;
   height: 100%;
-  // background-image: linear-gradient(-120deg, rgb(47, 9, 47), rgb(31, 1, 31));
-  background-image: linear-gradient(-120deg, rgb(85, 78, 85), rgb(37, 29, 37));
 }
 
 #nav {

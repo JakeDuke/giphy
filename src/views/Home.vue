@@ -1,92 +1,80 @@
 <template>
-  <div class="main">
-    <b-spinner v-if="loading" />
-    <div v-else class="w-100">
-      <h3>{{ headerName }}</h3>
-      <Register v-if="visibleComponent === 1" />
-      <Credentials v-if="visibleComponent === 2" />
-      <BasicInfo v-if="visibleComponent === 3" />
-      <SosButton v-if="visibleComponent === 4" />
-      <b-button v-if="visibleComponent !== 4" pill variant="primary" @click="setVisible">
-        {{ visibleComponent === 1 ? 'Войти' : 'Далее' }}
-      </b-button>
+  <div class="container">
+    <!-- <b-spinner v-if="loading" /> -->
+
+    <img
+      src="https://upload.wikimedia.org/wikipedia/commons/8/82/Giphy-logo.svg"
+      alt=""
+      class="logo"
+    />
+
+    <b-form-input
+      v-model="searchQuery"
+      placeholder="Giphy name"
+      debounce="300"
+    ></b-form-input>
+
+    <div v-if="giphys" class="results">
+      <div v-for="giphy in giphys" :key="giphy.id" class="item">
+        <img :src="giphy.images.original.url" alt="giphy" />
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-import Register from "@/components/Register.vue";
-import Credentials from "@/components/Credentials.vue";
-import BasicInfo from "@/components/BasicInfo.vue";
-import SosButton from "@/components/SosButton.vue";
+import { Component, Vue, Watch } from "vue-property-decorator";
+import axios from "axios";
 
 @Component({
-  components: {
-    Register,
-    Credentials,
-    BasicInfo,
-    SosButton
-  }
+  components: {},
 })
 export default class Home extends Vue {
-  get loading() {
-    return this.$store.state.loading
+  searchQuery = "";
+
+  giphys = [];
+
+  get url() {
+    return `https://api.giphy.com/v1/gifs/search?api_key=dc6zaTOxFJmzC&q=${this.searchQuery}`;
   }
 
-  load () {
-    this.$store.commit('load')
+  async getGiphys() {
+    const { data } = await axios.get(this.url);
+    this.giphys = data.data;
   }
 
-  get headerName () {
-    switch (this.visibleComponent) {
-      case 2:
-      return 'Личные данные'
-
-      case 3:
-      return 'Информация о болезнях'
-
-      default:
-      return ''
-    }
-  }
-
-  visibleComponent = 1
-
-  setVisible () {
-    this.visibleComponent++
-    this.load()
+  @Watch("searchQuery")
+  onSearchQueryhanged() {
+    this.getGiphys();
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.main {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+.container {
   justify-content: center;
-  align-items: center;
-  position: relative;
 }
 
-.spinner-border {
-  width: 4rem;
-  height: 4rem;
+.results {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px 5px;
 }
 
-.btn {
-  margin-top: 60px;
-  padding: 12px 30px;
-  min-width: 160px;
-  font-size: 18px;
+.item {
+  img {
+    height: 200px;
+    width: 300px;
+  }
 }
 
-h3 {
-  position: absolute;
-  top: 0;
-  text-align: center;
-  width: 100%;
-  font-size: 22px;
+.logo {
+  max-width: 500px;
+  margin: 3rem 0;
+}
+
+input {
+  max-width: 300px;
+  margin: 3rem auto;
 }
 </style>

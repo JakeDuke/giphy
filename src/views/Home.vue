@@ -67,12 +67,13 @@ export default class Home extends Vue {
   allLoaded: null | boolean = null;
 
   get offset(): number {
-    const num = this.perPage * (this.currentPage - 1);
-
+    const offsetCount = this.perPage * (this.currentPage - 1);
     if (!this.totalCount) {
-      return num;
+      return offsetCount;
     } else {
-      return this.totalCount - num < this.perPage ? this.totalCount - 12 : num;
+      return this.totalCount - offsetCount < this.perPage
+        ? this.totalCount - 12
+        : offsetCount;
     }
   }
 
@@ -98,6 +99,7 @@ export default class Home extends Vue {
     }
   }
 
+  // Display gifs when all of them are loaded
   handleLoad() {
     this.imgLoaded++;
     if (this.totalCount > 0 && this.totalCount < this.perPage) {

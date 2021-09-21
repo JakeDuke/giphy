@@ -12,24 +12,39 @@
       debounce="300"
     ></b-form-input>
 
-    <div v-if="error">
-      <h3>{{ error }}</h3>
-    </div>
+    <template v-if="loading && allLoaded === false">
+      <div class="text-center">
+        <b-spinner variant="primary"></b-spinner>
+      </div>
+    </template>
 
-    <div v-else-if="giphys" class="wrap">
-      <div class="results">
-        <div v-for="giphy in giphys" :key="giphy.id" class="item">
-          <img :src="giphy.images.original.url" alt="giphy" />
-        </div>
+    <template v-else>
+      <div v-if="error">
+        <h3>{{ error }}</h3>
       </div>
 
-      <b-pagination
-        v-if="totalCount > perPage"
-        v-model="currentPage"
-        :total-rows="totalCount"
-        :per-page="perPage"
-      ></b-pagination>
-    </div>
+      <div v-else-if="giphys" class="wrap">
+        <h3 v-show="allLoaded === false" class="text-center">
+          Loading your giphies...
+        </h3>
+        <div v-show="allLoaded" class="results">
+          <div v-for="giphy in giphys" :key="giphy.id" class="item">
+            <img
+              :src="giphy.images.preview_gif.url"
+              alt="giphy"
+              @load="handleLoad"
+            />
+          </div>
+        </div>
+
+        <b-pagination
+          v-if="totalCount > perPage"
+          v-model="currentPage"
+          :total-rows="totalCount"
+          :per-page="perPage"
+        ></b-pagination>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -38,38 +53,63 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import axios from "axios";
 
 @Component({
-  components: {},
+  components: {}
 })
 export default class Home extends Vue {
   searchQuery = "";
-  perPage = 21;
+  perPage = 12;
   currentPage = 1;
   totalCount = 0;
-  giphys = [];
+  giphys: null | object[] = null;
   error = "";
+  loading = false;
+  imgLoaded = 0;
+  allLoaded: null | boolean = null;
 
-  get offset() {
-    return this.perPage * (this.currentPage - 1);
+  get offset(): number {
+    const num = this.perPage * (this.currentPage - 1);
+
+    if (!this.totalCount) {
+      return num;
+    } else {
+      return this.totalCount - num < this.perPage ? this.totalCount - 12 : num;
+    }
   }
 
-  get url() {
-    return `https://api.giphy.com/v1/gifs/search?api_key=dc6zaTOxFJmzC&q=${this.searchQuery}&offset=${this.offset}&limit=${this.perPage}`;
+  get url(): string {
+    return `https://api.giphy.com/v1/gifs/search?api_key=YGUDAC01pUo51unOUAZCUSGcq7BbED7y&q=${this.searchQuery}&offset=${this.offset}&limit=${this.perPage}`;
   }
 
-  async getGiphys() {
+  async getGiphys(): Promise<void> {
+    this.imgLoaded = 0;
+    this.loading = true;
     this.error = "";
     this.giphys = [];
+    this.allLoaded = false;
     try {
       const { data } = await axios.get(this.url);
       this.totalCount = data.pagination.total_count;
       this.giphys = data.data;
     } catch (e) {
-      this.error = "Nothing was found";
+      this.error = "Something went wrong";
+    } finally {
+      this.loading = false;
+      if (this.giphys && !this.giphys.length) this.error = "Nothing was found";
+    }
+  }
+
+  handleLoad() {
+    this.imgLoaded++;
+    if (this.totalCount > 0 && this.totalCount < this.perPage) {
+      this.allLoaded = this.imgLoaded === this.totalCount;
+    } else {
+      this.allLoaded = this.imgLoaded === this.perPage;
     }
   }
 
   @Watch("searchQuery")
   onSearchQuerychanged() {
+    this.currentPage = 1;
     this.getGiphys();
   }
 
@@ -78,7 +118,7 @@ export default class Home extends Vue {
     this.getGiphys();
     window.scrollTo({
       top: 0,
-      behavior: "smooth",
+      behavior: "smooth"
     });
   }
 }

@@ -78,10 +78,19 @@ export default class Home extends Vue {
   }
 
   get url(): string {
-    return `https://api.giphy.com/v1/gifs/search?api_key=YGUDAC01pUo51unOUAZCUSGcq7BbED7y&q=${this.searchQuery}&offset=${this.offset}&limit=${this.perPage}`;
+    return `https://api.giphy.com/v1/gifs/search?api_key=YGUDAC01pUo51unOUAZCUSGcq7BbED7y&q=${encodeURIComponent(
+      this.searchQuery
+    )}&offset=${this.offset}&limit=${this.perPage}`;
   }
 
   async getGiphys(): Promise<void> {
+    this.$router.push({
+      path: `${"/search/" + this.searchQuery}`,
+      query: {
+        offset: `${this.offset}`,
+        limit: `${this.perPage}`
+      }
+    });
     this.imgLoaded = 0;
     this.loading = true;
     this.error = "";
@@ -122,6 +131,11 @@ export default class Home extends Vue {
       top: 0,
       behavior: "smooth"
     });
+  }
+
+  @Watch("$route", { immediate: true, deep: true })
+  onUrlChange() {
+    if (this.$route.params.id) this.searchQuery = this.$route.params.id;
   }
 }
 </script>

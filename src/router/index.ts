@@ -9,6 +9,11 @@ const routes: Array<RouteConfig> = [
     path: "/",
     name: "Home",
     component: Home
+  },
+  {
+    path: "/search/:id",
+    name: "Search",
+    component: Home
   }
 ];
 
